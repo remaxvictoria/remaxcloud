@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="es"><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propiedades - RE/MAX Victoria Durango</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .nav-logo .logo-img { height: 70px; }
+
+    .navbar { background: #0B2742 !important; }
+
+    .property-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    @media(max-width: 1024px){ .property-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+    @media(max-width: 600px){ .property-grid { grid-template-columns: 1fr !important; } }
+
+    .property-image-wrap { position: relative; }
+    .op-badge {
+      position: absolute; top: 10px; left: 10px;
+      padding: 4px 12px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 700; color: white;
+      z-index: 2; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .op-venta { background: #E11B22; }
+    .op-renta { background: #1f4e79; }
+
+
+    .filters-section {
+      background: white;
+      padding: 28px 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .filters-spacer {
+      height: 80px;
+      background: #f5f7fa;
+    }
+    .filters-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 140px;
+    }
+    .filter-group label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #7a8fa6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filter-group select,
+    .filter-group input {
+      padding: 10px 12px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      color: #2d3748;
+      outline: none;
+      background: white;
+      transition: border-color 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='%230b2742' height='16' viewBox='0 0 20 20' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 32px;
+    }
+    .filter-group input {
+      background-image: none;
+      padding-right: 12px;
+    }
+    .filter-group select:focus,
+    .filter-group input:focus { border-color: #1f4e79; }
+
+    .btn-buscar {
+      padding: 10px 28px;
+      background: #E11B22;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+      height: 44px;
+    }
+    .btn-buscar:hover { background: #c4161c; transform: scale(1.02); }
+
+    .btn-limpiar {
+      padding: 10px 18px;
+      background: #f1f5f9;
+      color: #4a5568;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      height: 44px;
+    }
+    .btn-limpiar:hover { background: #e2e8f0; }
+
+
+    .results-section {
+      max-width: 1200px;
+      margin: 36px auto 60px;
+      padding: 0 20px;
+    }
+    .results-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .results-count {
+      font-size: 0.95rem;
+      color: #4a5568;
+    }
+    .results-count strong { color: #1f4e79; }
+
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+    .pagination button {
+      width: 40px; height: 40px;
+      border: 1.5px solid #e2e8f0;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      color: #4a5568;
+      transition: 0.2s;
+    }
+    .pagination button:hover { border-color: #1f4e79; color: #1f4e79; }
+    .pagination button.active {
+      background: #1f4e79; color: white; border-color: #1f4e79;
+    }
+    .pagination button:disabled { opacity: 0.4; cursor: default; }
+
+
+    .whatsapp-float {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 56px; height: 56px; background: #25D366;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 20px rgba(37,211,102,0.45); z-index: 9000; transition: transform 0.2s;
+    }
+    .whatsapp-float:hover { transform: scale(1.1); }
+    .whatsapp-float svg { width: 30px; height: 30px; fill: white; }
+
+    @media(max-width:768px){
+      .filters-inner { flex-direction: column; }
+      .filter-group { min-width: 100%; }
+      .btn-buscar, .btn-limpiar { width: 100%; }
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      z-index: 10001;
+    }
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      .nav-menu {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: #0c2c54;
+        flex-direction: column;
+        width: 250px;
+        padding: 20px;
+        display: none !important;
+        z-index: 10000;
+      }
+      .nav-menu.active { display: flex !important; }
+      .menu-item { width: 100%; margin-bottom: 15px; }
+      .dropdown {
+        position: relative !important;
+        display: none;
+        width: 100%;
+        background: #ffffff;
+        border-radius: 8px;
+        margin-top: 8px;
+        padding: 10px 0;
+      }
+      .dropdown p { color: #1f4e79 !important; }
+      .menu-item.open .dropdown { display: block; }
+    }
+
+    html, body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    body > *:not(footer):not(nav):not(script) {
+      flex-shrink: 0;
+    }
+    .footer {
+      margin-top: auto !important;
+    }
+
+
+
+    .btn-mas-filtros {
+      padding: 10px 18px;
+      background: white;
+      color: #1f4e79;
+      border: 1.5px solid #1f4e79;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-mas-filtros:hover { background: #1f4e79; color: white; }
+    .btn-mas-filtros.active { background: #1f4e79; color: white; }
+
+    .filtros-extra {
+      display: none;
+      max-width: 1200px;
+      margin: 16px auto 0;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      gap: 24px;
+    }
+    .filtros-extra.open { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); overflow: hidden; }
+
+    .filtro-extra-grupo { display: flex; flex-direction: column; gap: 8px; min-width: 0; overflow: hidden; }
+    .filtro-extra-grupo > label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #7a8fa6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+
+    .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      padding: 6px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 20px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #4a5568;
+      background: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .chip:hover { border-color: #1f4e79; color: #1f4e79; }
+    .chip.selected { background: #1f4e79; color: white; border-color: #1f4e79; }
+
+
+    .desde-hasta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .desde-hasta input {
+      padding: 8px 8px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem;
+      color: #2d3748;
+      outline: none;
+      background: white;
+      transition: border-color 0.2s;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .desde-hasta input:focus { border-color: #1f4e79; }
+    .desde-hasta input::placeholder { color: #a0aec0; font-size: 0.82rem; }
+
+    .filtro-extra-sublabel {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #a0aec0;
+      margin-bottom: 2px;
+    }
+
+    @media(max-width: 768px) {
+      .filtros-extra.open { grid-template-columns: 1fr; }
+    }
+
+    .status-badge {
+      position: absolute;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      z-index: 2;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-propuesta {
+      top: 10px;
+      right: 10px;
+      background: #F5CF0B;
+      color: #5a4000;
+    }
+    .status-proceso {
+      top: 42px;
+      right: 10px;
+      background: #ea580c;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+
+<nav class="navbar scrolled">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <img src="img/Remaxlogoblanco.png" class="logo-img">
+    </a>
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+    <ul class="nav-menu" id="nav-menu">
+      <li class="menu-item">
+        <span>Aviso de privacidad ▾</span>
+        <div class="dropdown">
+          <p><a href="nom247.html">Contrato NOM 247</a></p>
+          <p><a href="carta-derechos.html">Carta de Derechos del Consumidor</a></p>
+          <p><a href="https://remax.com.mx/codigoetica" target="_blank">Código de ética</a></p>
+        </div>
+      </li>
+      <li class="menu-item">
+        <a href="contacto.html" style="color:inherit;text-decoration:none;">Contacto</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="filters-spacer"></div>
+
+
+<div class="filters-section">
+  <div class="filters-inner">
+
+    <div class="filter-group">
+      <label>Ubicación</label>
+      <input type="text" id="f-ubicacion" placeholder="Colonia, ciudad...">
+    </div>
+
+    <div class="filter-group">
+      <label>Rango de precio</label>
+      <select id="f-precio">
+        <option value="">Todos los precios</option>
+        <option value="0-1">$0 — $1,000,000</option>
+        <option value="1-2">$1,000,000 — $2,000,000</option>
+        <option value="2-3">$2,000,000 — $3,000,000</option>
+        <option value="3+">Más de $3,000,000</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Tipo de propiedad</label>
+      <select id="f-tipo">
+        <option value="">Todos</option>
+        <option value="casa">Casa</option>
+        <option value="departamento">Departamento</option>
+        <option value="terreno">Terreno</option>
+        <option value="local">Local comercial</option>
+        <option value="oficina">Oficina</option>
+        <option value="bodega">Bodega</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Operación</label>
+      <select id="f-operacion">
+        <option value="">Venta y renta</option>
+        <option value="1">En venta</option>
+        <option value="2">En renta</option>
+      </select>
+    </div>
+
+    <button class="btn-mas-filtros" id="btn-mas-filtros" onclick="toggleFiltrosExtra()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+      Más filtros
+    </button>
+    <button class="btn-buscar" onclick="buscar()">Buscar</button>
+    <button class="btn-limpiar" onclick="limpiar()">Limpiar</button>
+
+  </div>
+
+
+  <div class="filtros-extra" id="filtros-extra">
+
+  
+    <div class="filtro-extra-grupo">
+      <label>Cuartos</label>
+      <div class="chip-row" id="chips-cuartos">
+        <button class="chip" data-val="1" onclick="selectChip(this,'chips-cuartos','f-cuartos')">1</button>
+        <button class="chip" data-val="2" onclick="selectChip(this,'chips-cuartos','f-cuartos')">2</button>
+        <button class="chip" data-val="3" onclick="selectChip(this,'chips-cuartos','f-cuartos')">3</button>
+        <button class="chip" data-val="4" onclick="selectChip(this,'chips-cuartos','f-cuartos')">4</button>
+        <button class="chip" data-val="5" onclick="selectChip(this,'chips-cuartos','f-cuartos')">5+</button>
+      </div>
+      <input type="hidden" id="f-cuartos" value="">
+    </div>
+
+
+    <div class="filtro-extra-grupo">
+      <label>Baños</label>
+      <div class="chip-row" id="chips-banos">
+        <button class="chip" data-val="1"   onclick="selectChip(this,'chips-banos','f-banos')">1</button>
+        <button class="chip" data-val="1.5" onclick="selectChip(this,'chips-banos','f-banos')">1.5</button>
+        <button class="chip" data-val="2"   onclick="selectChip(this,'chips-banos','f-banos')">2</button>
+        <button class="chip" data-val="2.5" onclick="selectChip(this,'chips-banos','f-banos')">2.5</button>
+        <button class="chip" data-val="3"   onclick="selectChip(this,'chips-banos','f-banos')">3</button>
+        <button class="chip" data-val="4"   onclick="selectChip(this,'chips-banos','f-banos')">4+</button>
+      </div>
+      <input type="hidden" id="f-banos" value="">
+    </div>
+
+
+    <div class="filtro-extra-grupo">
+      <label>Estacionamientos</label>
+      <div class="chip-row" id="chips-est">
+        <button class="chip" data-val="1" onclick="selectChip(this,'chips-est','f-estacionamientos')">1</button>
+        <button class="chip" data-val="2" onclick="selectChip(this,'chips-est','f-estacionamientos')">2</button>
+        <button class="chip" data-val="3" onclick="selectChip(this,'chips-est','f-estacionamientos')">3</button>
+        <button class="chip" data-val="4" onclick="selectChip(this,'chips-est','f-estacionamientos')">4+</button>
+      </div>
+      <input type="hidden" id="f-estacionamientos" value="">
+    </div>
+
+
+    <div class="filtro-extra-grupo">
+      <label>Tamaño</label>
+      <div class="filtro-extra-sublabel">Terreno (m²)</div>
+      <div class="desde-hasta">
+        <input type="number" id="f-terreno-min" placeholder="Desde">
+        <input type="number" id="f-terreno-max" placeholder="Hasta">
+      </div>
+      <div class="filtro-extra-sublabel" style="margin-top:10px;">Construcción (m²)</div>
+      <div class="desde-hasta">
+        <input type="number" id="f-const-min" placeholder="Desde">
+        <input type="number" id="f-const-max" placeholder="Hasta">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="results-section">
+  <div class="results-bar">
+    <div class="results-count" id="results-count">Cargando...</div>
+  </div>
+  <div id="results-grid"></div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-logo"><img src="img/Remaxlogoblanco.png" class="footer-logo-img"></div>
+    <ul class="footer-menu">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="propiedades.html">Propiedades</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+    <div class="footer-icon">☰</div>
+  </div>
+  <hr class="footer-line">
+  <p class="footer-copy">Remax Victoria. Todos los derechos reservados ©</p>
+</footer>
+
+
+<script>
+const API_BASE = '/api';
+const PAGE_SIZE = 12;
+const FALLBACK  = 'https://cdn.remax.com.mx/properties/default_rebrand.jpg';
+
+let allProps    = [];
+let filtered    = [];
+let currentPage = 1;
+
+
+window.addEventListener('scroll', () =>
+  document.querySelector('.navbar')?.classList.toggle('scrolled', window.scrollY > 50)
+);
+
+
+function buildCard(p) {
+  const opLabel = String(p.operacion) === '2' ? 'En renta' : 'En venta';
+  const opClass = String(p.operacion) === '2' ? 'op-renta' : 'op-venta';
+  const badgePropuesta      = (p.propuesta === '1'       || p.propuesta === 1)
+    ? '<span class="status-badge status-propuesta">Propuesta</span>' : '';
+  const badgeVentaPendiente = (p.venta_pendiente === '1' || p.venta_pendiente === 1)
+    ? '<span class="status-badge status-proceso">En proceso de venta</span>' : '';
+  return `
+  <div class="property-card" onclick='goToDetail(${JSON.stringify(p)})'>
+    <div class="property-image-wrap">
+      <img src="${p.imagen || FALLBACK}" class="property-image" onerror="this.src='${FALLBACK}'">
+      <div class="remax-badge">RE/MAX</div>
+      <span class="op-badge ${opClass}">${opLabel}</span>
+      ${badgePropuesta}
+      ${badgeVentaPendiente}
+    </div>
+    <div class="property-body">
+      <div class="property-title">${p.titulo || 'Propiedad'}</div>
+      <div class="property-address">
+        <img src="img/ubicacion.png" class="logo-img"> ${p.ubicacion || 'Durango'}
+      </div>
+      <div class="property-price">
+        ${Number(p.precio||0).toLocaleString('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0})}
+      </div>
+    </div>
+  </div>`;
+}
+
+function goToDetail(p) {
+  const id = p?.propiedad_id || p?.id || '';
+  window.location.href = id
+    ? `property-detail.html?id=${encodeURIComponent(id)}`
+    : 'property-detail.html';
+}
+
+
+function renderPage() {
+  const grid  = document.getElementById('results-grid');
+  const count = document.getElementById('results-count');
+  const pag   = document.getElementById('pagination');
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const start      = (currentPage - 1) * PAGE_SIZE;
+  const slice      = filtered.slice(start, start + PAGE_SIZE);
+
+  count.innerHTML = filtered.length
+    ? `<strong>${filtered.length}</strong> propiedades encontradas`
+    : 'No se encontraron propiedades con esos filtros.';
+
+  if (!slice.length) {
+    grid.innerHTML = '<p style="padding:30px;color:#666;text-align:center;">Sin resultados.</p>';
+    pag.innerHTML  = '';
+    return;
+  }
+
+  grid.innerHTML = `<div class="property-grid">${slice.map(buildCard).join('')}</div>`;
+
+
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+
+  let btns = '';
+  btns += `<button onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+      btns += `<button class="${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    } else if (Math.abs(i - currentPage) === 3) {
+      btns += `<button disabled>…</button>`;
+    }
+  }
+  btns += `<button onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  pag.innerHTML = btns;
+}
+
+function goPage(n) {
+  currentPage = n;
+  renderPage();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
+function buscar() {
+  const ubicacion = (document.getElementById('f-ubicacion').value || '').toLowerCase().trim();
+  const precio    = document.getElementById('f-precio').value;
+  const tipo      = document.getElementById('f-tipo').value;
+  const operacion = document.getElementById('f-operacion').value;
+  const cuartos   = document.getElementById('f-cuartos').value;
+  const banos     = document.getElementById('f-banos').value;
+  const estac     = document.getElementById('f-estacionamientos').value;
+
+  const terrenoMinRaw = document.getElementById('f-terreno-min').value.trim();
+  const terrenoMaxRaw = document.getElementById('f-terreno-max').value.trim();
+  const constMinRaw   = document.getElementById('f-const-min').value.trim();
+  const constMaxRaw   = document.getElementById('f-const-max').value.trim();
+
+  const filtrarTerreno = terrenoMinRaw !== '' || terrenoMaxRaw !== '';
+  const filtrarConst   = constMinRaw   !== '' || constMaxRaw   !== '';
+
+
+  const terrenoMin = terrenoMinRaw !== '' ? Number(terrenoMinRaw) : -Infinity;
+  const terrenoMax = terrenoMaxRaw !== '' ? Number(terrenoMaxRaw) :  Infinity;
+  const constMin   = constMinRaw   !== '' ? Number(constMinRaw)   : -Infinity;
+  const constMax   = constMaxRaw   !== '' ? Number(constMaxRaw)   :  Infinity;
+
+  filtered = allProps.filter(p => {
+
+
+    if (ubicacion && !(p.ubicacion || '').toLowerCase().includes(ubicacion)) return false;
+
+
+    if (precio) {
+      const v = Number(p.precio || 0);
+      if (precio === '0-1' && !(v >= 0       && v < 1000000)) return false;
+      if (precio === '1-2' && !(v >= 1000000 && v < 2000000)) return false;
+      if (precio === '2-3' && !(v >= 2000000 && v < 3000000)) return false;
+      if (precio === '3+'  && !(v >= 3000000))                 return false;
+    }
+
+
+    if (tipo && !(p.tipo || '').toLowerCase().includes(tipo)) return false;
+
+
+    if (operacion && String(p.operacion) !== operacion) return false;
+
+
+    if (cuartos) {
+      const c = Math.round(Number(p.cuartos || p.recamaras || 0));
+      if (!c) return false;
+      if (c < Number(cuartos)) return false;
+    }
+
+
+    if (banos) {
+      const b = Number(p.banos || 0);
+      if (!b) return false;
+      if (b < Number(banos)) return false;
+    }
+
+    if (estac) {
+      const e = Number(p.estacionamientos || p.numero_estacionamientos || 0);
+      if (!e) return false;
+      if (Math.round(e) < Number(estac)) return false;
+    }
+
+    if (filtrarTerreno) {
+      const t = Number(p.m2_terreno || 0);
+      if (!t) return false;
+      if (t < terrenoMin || t > terrenoMax) return false;
+    }
+
+    if (filtrarConst) {
+      const c = Number(p.m2_construccion || 0);
+      if (!c) return false;
+      if (c < constMin || c > constMax) return false;
+    }
+
+    return true;
+  });
+
+  currentPage = 1;
+  renderPage();
+}
+
+function limpiar() {
+  document.getElementById('f-ubicacion').value       = '';
+  document.getElementById('f-precio').value          = '';
+  document.getElementById('f-tipo').value            = '';
+  document.getElementById('f-operacion').value       = '';
+  document.getElementById('f-cuartos').value         = '';
+  document.getElementById('f-banos').value           = '';
+  document.getElementById('f-estacionamientos').value= '';
+  document.getElementById('f-terreno-min').value     = '';
+  document.getElementById('f-terreno-max').value     = '';
+  document.getElementById('f-const-min').value       = '';
+  document.getElementById('f-const-max').value       = '';
+
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  filtered    = [...allProps];
+  currentPage = 1;
+  renderPage();
+}
+
+function toggleFiltrosExtra() {
+  const panel = document.getElementById('filtros-extra');
+  const btn   = document.getElementById('btn-mas-filtros');
+  panel.classList.toggle('open');
+  btn.classList.toggle('active');
+}
+
+function selectChip(el, groupId, hiddenId) {
+
+  const wasSelected = el.classList.contains('selected');
+  document.querySelectorAll(`#${groupId} .chip`).forEach(c => c.classList.remove('selected'));
+  if (!wasSelected) {
+    el.classList.add('selected');
+    document.getElementById(hiddenId).value = el.dataset.val;
+  } else {
+    document.getElementById(hiddenId).value = '';
+  }
+}
+
+
+async function init() {
+  document.getElementById('results-count').textContent = 'Cargando propiedades...';
+  try {
+    const res  = await fetch(`${API_BASE}/propiedades`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    let props  = Array.isArray(data) ? data : data.data || [];
+
+    if (data.raw?.data?.prop_data) {
+      const rawMap = {};
+      data.raw.data.prop_data.forEach(r => {
+        rawMap[r.propiedad_id] = { operacion: r.operacion, propuesta: 'propuesta' in r ? r.propuesta : undefined };
+      });
+      props = props.map(p => {
+        const raw = rawMap[p.propiedad_id] || rawMap[p.id] || {};
+        return { ...p, operacion: p.operacion || raw.operacion || '1', propuesta: 'propuesta' in raw ? raw.propuesta : p.propuesta };
+      });
+    }
+
+    allProps = props;
+    filtered = [...allProps];
+
+
+    const params  = new URLSearchParams(window.location.search);
+    const credito = params.get('credito');
+    const maxP    = params.get('maxPrecio');
+    const op      = params.get('operacion');
+
+
+    const creditoToSelect = { bancario: '3+', fovissste: '2-3', infonavit: '1-2' };
+
+    if (credito && creditoToSelect[credito]) {
+      document.getElementById('f-precio').value = creditoToSelect[credito];
+    }
+    if (maxP) {
+      filtered = filtered.filter(p => Number(p.precio||0) <= Number(maxP));
+    }
+    if (op) {
+      document.getElementById('f-operacion').value = op;
+      filtered = filtered.filter(p => String(p.operacion) === op);
+    }
+
+    if (credito) {
+      const nombres = { bancario:'Crédito Bancario', fovissste:'FOVISSSTE', infonavit:'INFONAVIT' };
+      const titleEl = document.querySelector('.results-count');
+      if (titleEl) titleEl.dataset.credito = nombres[credito] || '';
+    }
+
+    renderPage();
+  } catch(e) {
+    console.error(e);
+    document.getElementById('results-count').textContent = `Error al cargar: ${e.message}`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+<script>
+
+  (function() {
+    var toggle = document.getElementById('menu-toggle');
+    var menu   = document.getElementById('nav-menu');
+    if (toggle && menu) {
+      toggle.addEventListener('click', function() { menu.classList.toggle('active'); });
+    }
+    document.querySelectorAll('.menu-item').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        if (window.innerWidth <= 768) {
+          item.classList.toggle('open');
+          e.stopPropagation();
+        }
+      });
+    });
+
+    document.addEventListener('click', function(e) {
+      if (menu && !menu.contains(e.target) && toggle && !toggle.contains(e.target)) {
+        menu.classList.remove('active');
+      }
+    });
+  })();
+</script>
+</body>
+</html>
